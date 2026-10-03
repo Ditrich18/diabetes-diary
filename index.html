@@ -13,50 +13,171 @@
   </header>
 
   <main>
-    <section class="summary">
-      <div class="card">
-        <span class="label">Углеводы за день</span>
-        <span class="value" id="totalCarbs">0 г</span>
+    <!-- ==================== ВКЛАДКИ ==================== -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="calc">🧮 Калькулятор</button>
+      <button class="tab" data-tab="sugar">🩸 Сахар</button>
+      <button class="tab" data-tab="records">📜 Записи</button>
+      <button class="tab" data-tab="products">🍽️ Продукты</button>
+      <button class="tab" data-tab="settings">⚙️ Настройки</button>
+    </nav>
+
+    <!-- ==================== ВКЛАДКА: КАЛЬКУЛЯТОР ==================== -->
+    <section class="tab-content active" id="tab-calc">
+      <div class="summary">
+        <div class="card">
+          <span class="label">Текущий сахар</span>
+          <span class="value" id="currentSugarDisplay">— ммоль/л</span>
+        </div>
+        <div class="card">
+          <span class="label">Активный инсулин</span>
+          <span class="value" id="iobDisplay">0.0 ЕД</span>
+        </div>
       </div>
-      <div class="card">
-        <span class="label">Инсулин за день</span>
-        <span class="value" id="totalInsulin">0 ЕД</span>
+
+      <div class="form-section">
+        <h2>🩸 Шаг 1. Введи сахар сейчас</h2>
+        <form id="sugarQuickForm">
+          <input type="number" id="sugarQuick" placeholder="Например 10.0" min="1" max="35" step="0.1" required>
+          <button type="submit">Сохранить</button>
+        </form>
+      </div>
+
+      <div class="form-section">
+        <h2>🍽️ Шаг 2. Что будешь есть?</h2>
+        <div class="meal-builder">
+          <select id="productSelect"></select>
+          <input type="number" id="productGrams" placeholder="Граммы" min="1" step="1">
+          <button type="button" id="addMealItem">+ Добавить</button>
+        </div>
+        <ul id="mealList" class="meal-list"></ul>
+        <div class="meal-total">
+          Итого: <b id="mealCarbs">0</b> г углеводов,
+          <b id="mealProtein">0</b> г белков,
+          <b id="mealFat">0</b> г жиров,
+          <b id="mealKcal">0</b> ккал
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2>🧮 Шаг 3. Расчёт дозы</h2>
+        <button type="button" id="calculateBtn" class="big-btn">Рассчитать дозу</button>
+        <div id="calcResult" class="calc-result" style="display:none;"></div>
+      </div>
+
+      <div class="form-section">
+        <h2>💉 Шаг 4. Записать укол</h2>
+        <form id="insulinForm">
+          <select id="insulinType" required></select>
+          <input type="number" id="insulinDose" placeholder="Доза (ЕД)" min="0" step="0.5" required>
+          <input type="time" id="insulinTime" required>
+          <button type="submit">Добавить</button>
+        </form>
       </div>
     </section>
 
-    <section class="form-section">
-      <h2>🍽️ Добавить еду</h2>
-      <form id="foodForm">
-        <input type="text" id="foodName" placeholder="Название продукта" required>
-        <input type="number" id="foodCarbs" placeholder="Углеводы (г)" min="0" step="0.1" required>
-        <input type="time" id="foodTime" required>
-        <button type="submit">Добавить</button>
-      </form>
-    </section>
-
-    <section class="form-section">
-      <h2>💉 Добавить инсулин</h2>
-      <form id="insulinForm">
-        <select id="insulinType" required>
-          <option value="">Тип инсулина</option>
-          <option value="Быстрый">Быстрый</option>
-          <option value="Продлённый">Продлённый</option>
-          <option value="Смешанный">Смешанный</option>
-        </select>
-        <input type="number" id="insulinDose" placeholder="Доза (ЕД)" min="0" step="0.5" required>
-        <input type="time" id="insulinTime" required>
-        <button type="submit">Добавить</button>
-      </form>
-    </section>
-
-    <section class="records">
-      <div class="records-column">
-        <h2>Записи о еде</h2>
-        <ul id="foodList"></ul>
+    <!-- ==================== ВКЛАДКА: САХАР ==================== -->
+    <section class="tab-content" id="tab-sugar">
+      <div class="form-section">
+        <h2>🩸 Внести сахар в крови</h2>
+        <form id="sugarForm">
+          <input type="number" id="sugarValue" placeholder="ммоль/л" min="1" max="35" step="0.1" required>
+          <select id="sugarContext">
+            <option value="Натощак">Натощак</option>
+            <option value="Перед едой">Перед едой</option>
+            <option value="Через 2 ч после еды">Через 2 ч после еды</option>
+            <option value="Перед сном">Перед сном</option>
+            <option value="Ночью">Ночью</option>
+            <option value="Другое">Другое</option>
+          </select>
+          <input type="time" id="sugarTime" required>
+          <button type="submit">Добавить</button>
+        </form>
       </div>
-      <div class="records-column">
-        <h2>Записи об инсулине</h2>
-        <ul id="insulinList"></ul>
+
+      <div class="form-section">
+        <h2>Сегодняшние замеры</h2>
+        <ul id="sugarList"></ul>
+      </div>
+    </section>
+
+    <!-- ==================== ВКЛАДКА: ЗАПИСИ ==================== -->
+    <section class="tab-content" id="tab-records">
+      <div class="records">
+        <div class="records-column">
+          <h2>🍽️ Еда</h2>
+          <ul id="foodList"></ul>
+        </div>
+        <div class="records-column">
+          <h2>💉 Инсулин</h2>
+          <ul id="insulinList"></ul>
+        </div>
+      </div>
+      <div class="form-section" style="margin-top: 20px;">
+        <h2>📊 Итоги за сегодня</h2>
+        <p>Углеводы: <b id="totalCarbs">0</b> г</p>
+        <p>Белки: <b id="totalProtein">0</b> г</p>
+        <p>Жиры: <b id="totalFat">0</b> г</p>
+        <p>Калории: <b id="totalKcal">0</b> ккал</p>
+        <p>Инсулин: <b id="totalInsulin">0</b> ЕД</p>
+      </div>
+    </section>
+
+    <!-- ==================== ВКЛАДКА: ПРОДУКТЫ ==================== -->
+    <section class="tab-content" id="tab-products">
+      <div class="form-section">
+        <h2>➕ Добавить свой продукт</h2>
+        <form id="productForm">
+          <input type="text" id="newProductName" placeholder="Название" required>
+          <input type="number" id="newProductCarbs" placeholder="Углеводы на 100г" min="0" step="0.1" required>
+          <input type="number" id="newProductProtein" placeholder="Белки на 100г" min="0" step="0.1" value="0">
+          <input type="number" id="newProductFat" placeholder="Жиры на 100г" min="0" step="0.1" value="0">
+          <input type="number" id="newProductKcal" placeholder="Ккал на 100г" min="0" step="1" value="0">
+          <button type="submit">Добавить</button>
+        </form>
+      </div>
+
+      <div class="form-section">
+        <h2>📚 База продуктов (<span id="productsCount">0</span>)</h2>
+        <input type="text" id="productSearch" placeholder="🔍 Поиск продукта..." style="margin-bottom:10px;">
+        <ul id="productsList" class="products-list"></ul>
+      </div>
+    </section>
+
+    <!-- ==================== ВКЛАДКА: НАСТРОЙКИ ==================== -->
+    <section class="tab-content" id="tab-settings">
+      <div class="form-section">
+        <h2>⚙️ Мои коэффициенты</h2>
+        <p class="hint">⚠️ Эти значения подбирает врач! Изменяй только с его согласия.</p>
+        <form id="settingsForm">
+          <label>Углеводный коэффициент (УК) — грамм углеводов на 1 ЕД:
+            <input type="number" id="setUK" min="1" max="30" step="0.5" required>
+          </label>
+          <label>Коэффициент чувствительности (КЧ) — на сколько ммоль/л снижает 1 ЕД:
+            <input type="number" id="setKCH" min="0.1" max="10" step="0.1" required>
+          </label>
+          <label>Целевой сахар (ммоль/л):
+            <input type="number" id="setTarget" min="4" max="10" step="0.1" required>
+          </label>
+          <button type="submit">Сохранить настройки</button>
+        </form>
+      </div>
+
+      <div class="form-section">
+        <h2>💉 База инсулинов</h2>
+        <ul id="insulinsList" class="products-list"></ul>
+        <form id="insulinAddForm" style="margin-top:10px;">
+          <input type="text" id="newInsulinName" placeholder="Название (напр. Фиасп)" required>
+          <input type="number" id="newInsulinStart" placeholder="Начало действия (мин)" min="1" value="15" required>
+          <input type="number" id="newInsulinPeak" placeholder="Пик (мин)" min="1" value="90" required>
+          <input type="number" id="newInsulinEnd" placeholder="Конец (мин)" min="1" value="240" required>
+          <button type="submit">Добавить</button>
+        </form>
+      </div>
+
+      <div class="form-section">
+        <h2>🗑️ Опасная зона</h2>
+        <button type="button" id="clearAll" class="danger-btn">Удалить все данные</button>
       </div>
     </section>
   </main>
