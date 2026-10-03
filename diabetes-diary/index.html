@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дневник диабетика</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>🩺 Дневник диабетика</h1>
+    <p class="date" id="currentDate"></p>
+  </header>
+
+  <main>
+    <section class="summary">
+      <div class="card">
+        <span class="label">Углеводы за день</span>
+        <span class="value" id="totalCarbs">0 г</span>
+      </div>
+      <div class="card">
+        <span class="label">Инсулин за день</span>
+        <span class="value" id="totalInsulin">0 ЕД</span>
+      </div>
+    </section>
+
+    <section class="form-section">
+      <h2>🍽️ Добавить еду</h2>
+      <form id="foodForm">
+        <input type="text" id="foodName" placeholder="Название продукта" required>
+        <input type="number" id="foodCarbs" placeholder="Углеводы (г)" min="0" step="0.1" required>
+        <input type="time" id="foodTime" required>
+        <button type="submit">Добавить</button>
+      </form>
+    </section>
+
+    <section class="form-section">
+      <h2>💉 Добавить инсулин</h2>
+      <form id="insulinForm">
+        <select id="insulinType" required>
+          <option value="">Тип инсулина</option>
+          <option value="Быстрый">Быстрый</option>
+          <option value="Продлённый">Продлённый</option>
+          <option value="Смешанный">Смешанный</option>
+        </select>
+        <input type="number" id="insulinDose" placeholder="Доза (ЕД)" min="0" step="0.5" required>
+        <input type="time" id="insulinTime" required>
+        <button type="submit">Добавить</button>
+      </form>
+    </section>
+
+    <section class="records">
+      <div class="records-column">
+        <h2>Записи о еде</h2>
+        <ul id="foodList"></ul>
+      </div>
+      <div class="records-column">
+        <h2>Записи об инсулине</h2>
+        <ul id="insulinList"></ul>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
